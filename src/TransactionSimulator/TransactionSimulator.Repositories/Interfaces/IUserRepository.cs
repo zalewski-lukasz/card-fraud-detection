@@ -6,4 +6,5 @@ public interface IUserRepository
 {
     void AddUser(User user);
     User GetUser(int id);
+    IList<int> GetUserIds();
 }

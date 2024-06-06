@@ -39,4 +39,14 @@ public class UserRepository : IUserRepository
 
         return user;
     }
+
+    public IList<int> GetUserIds()
+    {
+        if (_users == null)
+        {
+            return new List<int>();
+        }
+
+        return _users.Select(u => u.Id).ToList();
+    }
 }

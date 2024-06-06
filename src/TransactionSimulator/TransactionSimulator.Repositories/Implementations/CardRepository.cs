@@ -39,4 +39,23 @@ public class CardRepository : ICardRepository
 
         return card;
     }
+
+    public IList<int> GetCardIds()
+    {
+        var ids = _cards.Select(c => c.Id).ToList();
+
+        return ids;
+    }
+
+    public void SubtractMoney(int id, float amount)
+    {
+        var card = _cards.FirstOrDefault(c => c.Id == id);
+
+        if (card is null)
+        {
+            throw new Exception($"Can't subtract money: card given by id {id} does not exist");
+        }
+
+        card.CardLimit -= amount;
+    }
 }
