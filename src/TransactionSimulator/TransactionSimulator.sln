@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionSimulator.DataGenerator", "TransactionSimulator.DataGenerator\TransactionSimulator.DataGenerator.csproj", "{6B1ABCA6-4479-4B55-BAEA-1A5B602F171C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionSimulator.API", "TransactionSimulator.API\TransactionSimulator.API.csproj", "{DB9F1ACA-09F7-43FA-82DB-3FD93A229B4A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionSimulator.BackgroundWorkers", "TransactionSimulator.BackgroundWorkers\TransactionSimulator.BackgroundWorkers.csproj", "{4AAED2D5-04F6-4AB9-AC16-69C3C0BA9483}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionSimulator.Models", "TransactionSimulator.Models\TransactionSimulator.Models.csproj", "{CA18A756-57B9-4BBE-8618-44A294E58FAF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionSimulator.Repositories", "TransactionSimulator.Repositories\TransactionSimulator.Repositories.csproj", "{1E5B24D6-C5BC-4BE4-AE1F-E2870A92ED68}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionSimulator.Services", "TransactionSimulator.Services\TransactionSimulator.Services.csproj", "{C5CC05FA-6AD7-4A5D-8A04-6026AFE60702}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +19,26 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6B1ABCA6-4479-4B55-BAEA-1A5B602F171C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B1ABCA6-4479-4B55-BAEA-1A5B602F171C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B1ABCA6-4479-4B55-BAEA-1A5B602F171C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B1ABCA6-4479-4B55-BAEA-1A5B602F171C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB9F1ACA-09F7-43FA-82DB-3FD93A229B4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB9F1ACA-09F7-43FA-82DB-3FD93A229B4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB9F1ACA-09F7-43FA-82DB-3FD93A229B4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB9F1ACA-09F7-43FA-82DB-3FD93A229B4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AAED2D5-04F6-4AB9-AC16-69C3C0BA9483}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AAED2D5-04F6-4AB9-AC16-69C3C0BA9483}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AAED2D5-04F6-4AB9-AC16-69C3C0BA9483}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AAED2D5-04F6-4AB9-AC16-69C3C0BA9483}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA18A756-57B9-4BBE-8618-44A294E58FAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA18A756-57B9-4BBE-8618-44A294E58FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA18A756-57B9-4BBE-8618-44A294E58FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA18A756-57B9-4BBE-8618-44A294E58FAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E5B24D6-C5BC-4BE4-AE1F-E2870A92ED68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E5B24D6-C5BC-4BE4-AE1F-E2870A92ED68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E5B24D6-C5BC-4BE4-AE1F-E2870A92ED68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E5B24D6-C5BC-4BE4-AE1F-E2870A92ED68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5CC05FA-6AD7-4A5D-8A04-6026AFE60702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5CC05FA-6AD7-4A5D-8A04-6026AFE60702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5CC05FA-6AD7-4A5D-8A04-6026AFE60702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5CC05FA-6AD7-4A5D-8A04-6026AFE60702}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

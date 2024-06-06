@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TransactionSimulator.Models\TransactionSimulator.Models.csproj" />
+    <ProjectReference Include="..\TransactionSimulator.Services\TransactionSimulator.Services.csproj" />
+  </ItemGroup>
+
 </Project>
