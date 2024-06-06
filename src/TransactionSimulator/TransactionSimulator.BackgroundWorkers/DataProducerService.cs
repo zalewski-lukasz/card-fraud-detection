@@ -1,6 +1,7 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 using TransactionSimulator.Services.Interfaces;
 
 namespace TransactionSimulator.BackgroundWorkers;
@@ -52,9 +53,10 @@ public class DataProducerService : BackgroundService
         {
             _logger.LogInformation($"Generated new transaction: userId: {transaction.UserId}, cardId: {transaction.CardId}, value: {transaction.Value}");
 
+            string jsonString = $"{{\"userId\": {transaction.UserId}, \"cardId\": {transaction.CardId}, \"value\": {transaction.Value.ToString(CultureInfo.InvariantCulture)}, \"longitude\": {transaction.Longitude.ToString(CultureInfo.InvariantCulture)}, \"latitude\": {transaction.Latitude.ToString(CultureInfo.InvariantCulture)}, \"availableLimit\": {transaction.AvailableLimit.ToString(CultureInfo.InvariantCulture)}}}";
             var message = new Message<Null, string>
             {
-                Value = $"{{\"UserId\": {transaction.UserId}, \"CardId\": {transaction.CardId}, \"Value\": {transaction.Value}, \"Longitude\": {transaction.Longitude}, \"Latitude\": {transaction.Latitude}, \"AvailableLimit\": {transaction.AvailableLimit}}}"
+                Value = jsonString
             };
 
             _kafkaProducer.Produce("Transakcje", message, deliveryReport =>

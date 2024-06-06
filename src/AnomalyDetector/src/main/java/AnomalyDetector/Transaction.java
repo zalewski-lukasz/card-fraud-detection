@@ -1,14 +1,19 @@
 package AnomalyDetector;
 
+import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 public class Transaction implements Serializable {
+
     private int cardId;
     private int userId;
     private double longitude;
     private double latitude;
     private double value;
     private double availableLimit;
+
+    public Transaction() { }
 
     public Transaction(int cardId, int userId, double longitude, double latitude, double value, double availableLimit) {
         this.cardId = cardId;
