@@ -1,0 +1,6 @@
+@TransactionSimulator.API_HostAddress = http://localhost:5162
+
+GET {{TransactionSimulator.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
