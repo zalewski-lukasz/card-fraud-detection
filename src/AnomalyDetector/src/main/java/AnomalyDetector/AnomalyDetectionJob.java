@@ -40,7 +40,7 @@ public class AnomalyDetectionJob {
 				.setValueOnlyDeserializer(new TransactionDeserializationSchema())
 				.build();
 
-		DataStream<Transaction> dataStream = env.fromSource(dataSource, WatermarkStrategy.noWatermarks(), "Source");
+		DataStream<Transaction> dataStream = env.fromSource(dataSource, WatermarkStrategy.noWatermarks(), "transaction-data-source");
 
 		KeyedStream<Transaction, Integer> keyedTransactions = dataStream
 				.keyBy(Transaction::getCardId);
@@ -58,6 +58,10 @@ public class AnomalyDetectionJob {
 										.setValueSerializationSchema(new AlertSerializationSchema())
 										.build())
 										.build();
+
+		foundAlerts
+				.sinkTo(dataSink)
+						.name("alerts-sink");
 
 		env.execute("Anomaly detection");
 	}
