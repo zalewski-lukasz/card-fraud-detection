@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="35.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TransactionSimulator.Models\TransactionSimulator.Models.csproj" />
+    <ProjectReference Include="..\TransactionSimulator.Repositories\TransactionSimulator.Repositories.csproj" />
+  </ItemGroup>
+
 </Project>

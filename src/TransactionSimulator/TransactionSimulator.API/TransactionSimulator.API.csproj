@@ -10,4 +10,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TransactionSimulator.Models\TransactionSimulator.Models.csproj" />
+    <ProjectReference Include="..\TransactionSimulator.Services\TransactionSimulator.Services.csproj" />
+  </ItemGroup>
+
 </Project>
