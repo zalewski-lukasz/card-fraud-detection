@@ -19,7 +19,8 @@ public class UserRepository : IUserRepository
             throw new ArgumentNullException("User is null");
         }
 
-        if (GetUser(user.Id) is not null)
+        var tmp = GetUser(user.Id);
+        if (tmp is not null)
         {
             throw new InvalidOperationException($"Transaction given by id {user.Id} already exists");
         }
@@ -31,11 +32,6 @@ public class UserRepository : IUserRepository
     public User GetUser(int id)
     {
         var user = _users.FirstOrDefault(t => t.Id == id);
-
-        if (user is null)
-        {
-            throw new Exception($"Transaction given by id {id} does not exist");
-        }
 
         return user;
     }

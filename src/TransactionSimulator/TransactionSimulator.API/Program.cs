@@ -1,3 +1,4 @@
+using TransactionSimulator.BackgroundWorkers;
 using TransactionSimulator.Repositories.Implementations;
 using TransactionSimulator.Repositories.Interfaces;
 using TransactionSimulator.Services.Implementations;
@@ -14,9 +15,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<ICardRepository, CardRepository>();
-builder.Services.AddSingleton<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddSingleton<IDataGeneratorService, DataGeneratorService>();
+builder.Services.AddSingleton<IDataManagementService, DataManagementService>();
+
+builder.Services.AddHostedService<DataProducerService>();
 
 var app = builder.Build();
 

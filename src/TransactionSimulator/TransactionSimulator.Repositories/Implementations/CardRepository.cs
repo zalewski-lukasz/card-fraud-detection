@@ -32,11 +32,6 @@ public class CardRepository : ICardRepository
     {
         var card = _cards.FirstOrDefault(t => t.Id == id);
 
-        if (card is null)
-        {
-            throw new Exception($"Card given by id {id} does not exist");
-        }
-
         return card;
     }
 
@@ -47,7 +42,7 @@ public class CardRepository : ICardRepository
         return ids;
     }
 
-    public void SubtractMoney(int id, float amount)
+    public void SubtractMoney(int id, decimal amount)
     {
         var card = _cards.FirstOrDefault(c => c.Id == id);
 

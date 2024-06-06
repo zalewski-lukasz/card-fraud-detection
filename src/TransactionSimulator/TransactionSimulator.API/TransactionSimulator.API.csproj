@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TransactionSimulator.BackgroundWorkers\TransactionSimulator.BackgroundWorkers.csproj" />
     <ProjectReference Include="..\TransactionSimulator.Models\TransactionSimulator.Models.csproj" />
     <ProjectReference Include="..\TransactionSimulator.Services\TransactionSimulator.Services.csproj" />
   </ItemGroup>
