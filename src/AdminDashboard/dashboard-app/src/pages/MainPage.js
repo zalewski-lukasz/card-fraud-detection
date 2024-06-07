@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import './pagestyle.css';
 
 import AlertChart from "../components/AlertChart";
 
 const MainPage = () => {
+
+    const [alertData, setAlertData] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            console.log("data fetch occured");
+        };
+
+        fetchData();
+        const interval = setInterval(fetchData, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     const data = [
         {
