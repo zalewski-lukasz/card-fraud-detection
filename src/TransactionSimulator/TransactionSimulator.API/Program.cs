@@ -19,7 +19,7 @@ builder.Services.AddSingleton<ICardRepository, CardRepository>();
 builder.Services.AddSingleton<IDataGeneratorService, DataGeneratorService>();
 builder.Services.AddSingleton<IDataManagementService, DataManagementService>();
 
-builder.Services.AddHostedService<DataProducerService>();
+builder.Services.AddHostedService<DataProducerService>().AddSingleton<DataProducerService>();
 
 var app = builder.Build();
 

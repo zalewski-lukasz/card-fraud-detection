@@ -47,7 +47,7 @@ public class DataConsumerService : BackgroundService
                         var alert = JsonConvert.DeserializeObject<Alert>(consumeResult.Message.Value);
                         alert.Id = Interlocked.Increment(ref _alertId);
 
-                        _logger.LogInformation($"Received Alert: Id: {alert.Id}, CardId: {alert.CardId}, UserId: {alert.UserId}, Reason: {alert.Reason}, Value: {alert.Value}");
+                        _logger.LogInformation($"Received Alert: Id: {alert.Id}, CardId: {alert.CardId}, UserId: {alert.UserId}, Reason: {alert.Reason}, Value: {alert.Value}, Timestamp: {alert.Timestamp}");
                         _alertRepository.AddAlert(alert);
                     }
                 }

@@ -74,4 +74,27 @@ public class DataGeneratorService : IDataGeneratorService
             _userRepository.AddUser(userFaker.Generate());
         }
     }
+
+    public IList<Transaction> GenerateTransactionsForOverTheLimitAnomaly()
+    {
+        var cardIds = _cardRepository.GetCardIds();
+
+        var transactionFaker = new Faker<Transaction>()
+            .RuleFor(t => t.CardId, f => f.PickRandom(cardIds))
+            .RuleFor(t => t.UserId, (f, t) =>
+            {
+                var card = _cardRepository.GetCard(t.CardId);
+                var user = _userRepository.GetUser(card.UserId);
+                return user.Id;
+            })
+            .RuleFor(t => t.Longitude, f => f.Address.Longitude())
+            .RuleFor(t => t.Latitude, f => f.Address.Latitude())
+            .RuleFor(t => t.Value, f => f.Finance.Amount(10000, 20000))
+            .RuleFor(t => t.AvailableLimit, (f, t) => _cardRepository.GetCard(t.CardId).CardLimit - t.Value);
+
+        var transaction = transactionFaker.Generate();
+        _cardRepository.SubtractMoney(transaction.CardId, transaction.Value);
+
+        return new List<Transaction> { transaction };
+    }
 }

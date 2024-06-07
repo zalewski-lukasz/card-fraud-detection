@@ -7,4 +7,5 @@ public class Alert
     public int UserId { get; set; }
     public required string Reason { get; set; }
     public double Value { get; set; }
+    public DateTime Timestamp {  get; set; }
 }

@@ -1,6 +1,9 @@
 package AnomalyDetector;
 
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDateTime;
 
 public class Alert {
 
@@ -12,6 +15,9 @@ public class Alert {
     private Integer userId;
     @JsonProperty("Value")
     private double value;
+    @JsonProperty("Timestamp")
+    @JsonFormat(pattern = "MM/dd/yyyy HH:mm:ss")
+    private LocalDateTime timestamp;
 
     public Alert() { }
 
@@ -20,6 +26,7 @@ public class Alert {
         this.cardId = cardId;
         this.userId = userId;
         this.value = value;
+        this.timestamp = LocalDateTime.now();
     }
 
     public String getReason() {
@@ -37,4 +44,6 @@ public class Alert {
     public double getValue() {
         return this.value;
     }
+
+    public LocalDateTime getTimestamp() { return this.timestamp; }
 }

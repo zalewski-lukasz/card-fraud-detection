@@ -15,6 +15,11 @@ builder.Services.AddSingleton<IAlertRepository, AlertRepository>();
 
 builder.Services.AddHostedService<DataConsumerService>();
 
+builder.Services.AddCors(p => p.AddPolicy("CorsPolicy", builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,5 +32,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("CorsPolicy");
 
 app.Run();

@@ -21,7 +21,7 @@ namespace AnomalyInfoConsumer.API.Controllers
         [Route("/api/get-all")]
         public IEnumerable<Alert> GetAll()
         {
-            return _alertRepository.GetAllAlerts().Take(10);
+            return _alertRepository.GetAllAlerts();
         }
     }
 }

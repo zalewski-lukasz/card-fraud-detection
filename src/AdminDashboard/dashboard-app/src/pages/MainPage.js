@@ -8,14 +8,29 @@ import AlertTable from '../components/AlertTable';
 const MainPage = () => {
 
     const [alertData, setAlertData] = useState([]);
+    const [reasonCounts, setReasonCounts] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log("data fetch occured");
+            try {
+                const response = await fetch('http://localhost:5261/api/get-all');
+                const data = await response.json();
+
+                const reasonMap = data.reduce((acc, alert) => {
+                    acc[alert.reason] = (acc[alert.reason] || 0) + 1;
+                    return acc;
+                }, {});
+
+                setAlertData(data);
+                setReasonCounts(reasonMap);
+                console.log("Data fetched and processed");
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         };
 
         fetchData();
-        const interval = setInterval(fetchData, 1000);
+        const interval = setInterval(fetchData, 10000); // 10000 ms = 10 seconds
         return () => clearInterval(interval);
     }, []);
 
@@ -69,7 +84,7 @@ const MainPage = () => {
             <Heading value={"Anomaly detection dashoard"}/>
             <AlertChart data={data}></AlertChart>
             <Heading value={"Detected anomalies"}/>
-            <AlertTable data={data} />
+            <AlertTable data={alertData} />
         </div>       
     )
 }
