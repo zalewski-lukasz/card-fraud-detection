@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './pagestyle.css';
 
 import AlertChart from "../components/AlertChart";
+import Heading from '../components/Heading';
 
 const MainPage = () => {
 
@@ -63,7 +64,11 @@ const MainPage = () => {
       ];
 
     return (
-        <AlertChart data={data}></AlertChart>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
+            <Heading value={"Anomaly detection dashoard"} />
+            <AlertChart data={data}></AlertChart>
+        </div>
+        
     )
 }
 

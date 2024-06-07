@@ -1,33 +1,35 @@
 import React from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './componentstyle.css';
+import Heading from "./Heading";
 
 const AlertChart = ({data}) => {
 
     return (
         
-        <div className=" ak">
-            <LineChart
-                width={500}
-                height={300}
-                data={data}
-                margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                }}
-            >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-            </LineChart>
-        
-        </div>
+        <div className="flexitems-center h-screen bg-gray-900">
+
+        <LineChart
+          width={800}
+          height={600}
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+          className="text-white"
+        >
+          <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+          <XAxis dataKey="name" stroke="#ccc" />
+          <YAxis stroke="#ccc" />
+          <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#444' }} itemStyle={{ color: '#fff' }} />
+          <Legend wrapperStyle={{ color: '#ccc' }} />
+          <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
+          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        </LineChart>
+      </div>
         
     )
 
