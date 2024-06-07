@@ -4,8 +4,8 @@ import './componentstyle.css';
 const Heading = ({value}) => {
 
     return (
-        <div>
-            <h1 className="text-white text-2xl lg:text-4xl font-bold font-sans m-5">{value}</h1>
+        <div className="w-[800px]">
+            <h1 className="text-white text-2xl lg:text-4xl font-bold font-sans m-6">{value}</h1>
         </div>
     )
 }

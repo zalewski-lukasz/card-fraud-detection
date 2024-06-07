@@ -3,6 +3,7 @@ import './pagestyle.css';
 
 import AlertChart from "../components/AlertChart";
 import Heading from '../components/Heading';
+import AlertTable from '../components/AlertTable';
 
 const MainPage = () => {
 
@@ -64,11 +65,12 @@ const MainPage = () => {
       ];
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
-            <Heading value={"Anomaly detection dashoard"} />
+        <div className="flex flex-col items-center min-h-screen bg-gray-900">
+            <Heading value={"Anomaly detection dashoard"}/>
             <AlertChart data={data}></AlertChart>
-        </div>
-        
+            <Heading value={"Detected anomalies"}/>
+            <AlertTable data={data} />
+        </div>       
     )
 }
 

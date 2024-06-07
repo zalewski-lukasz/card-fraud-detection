@@ -1,13 +1,11 @@
 import React from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './componentstyle.css';
-import Heading from "./Heading";
 
 const AlertChart = ({data}) => {
 
     return (
-        
-        <div className="flexitems-center h-screen bg-gray-900">
+        <div className=" bg-gray-900">
 
         <LineChart
           width={800}
