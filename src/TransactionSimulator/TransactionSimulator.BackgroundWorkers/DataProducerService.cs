@@ -103,6 +103,9 @@ public class DataProducerService : BackgroundService
                 case "OVER_THE_LIMIT_ANOMALY": 
                     list.Concat(_dataGeneratorService.GenerateTransactionsForOverTheLimitAnomaly());
                     break;
+                case "MULTIPLE_TRANSACTIONS_ANOMALY":
+                    list.Concat(_dataGeneratorService.GenerateTransactionForMultipleTransactionsAnomaly());
+                    break;
                 default:
                     break;
             }

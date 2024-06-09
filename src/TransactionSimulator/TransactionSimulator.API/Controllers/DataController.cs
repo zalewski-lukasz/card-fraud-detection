@@ -35,5 +35,13 @@ namespace TransactionSimulator.API.Controllers
             _producerService.RegisterAnomalyEvent("OVER_THE_LIMIT_ANOMALY");
             return Ok();
         }
+
+        [HttpPost]
+        [Route("/api/generate-multiple-transactions-anomaly")]
+        public IActionResult GenerateMultipleTransactionAnomaly()
+        {
+            _producerService.RegisterAnomalyEvent("MULTIPLE_TRANSACTIONS_ANOMALY");
+            return Ok();
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Bogus;
+using System.Transactions;
 using TransactionSimulator.Models;
 using TransactionSimulator.Repositories.Interfaces;
 using TransactionSimulator.Services.Interfaces;
+using Transaction = TransactionSimulator.Models.Transaction;
 
 namespace TransactionSimulator.Services.Implementations;
 
@@ -96,5 +98,32 @@ public class DataGeneratorService : IDataGeneratorService
         _cardRepository.SubtractMoney(transaction.CardId, transaction.Value);
 
         return new List<Transaction> { transaction };
+    }
+
+    public IList<Transaction> GenerateTransactionForMultipleTransactionsAnomaly()
+    {
+        var cardIds = _cardRepository.GetCardIds();
+        var selectedCardId = new Faker().PickRandom(cardIds);
+        var card = _cardRepository.GetCard(selectedCardId);
+        var user = _userRepository.GetUser(card.UserId);
+        var selectedUserId = user.Id;
+
+        var transactionFaker = new Faker<Transaction>()
+            .RuleFor(t => t.CardId, _ => selectedCardId)
+            .RuleFor(t => t.UserId, _ => selectedUserId)
+            .RuleFor(t => t.Longitude, f => f.Address.Longitude())
+            .RuleFor(t => t.Latitude, f => f.Address.Latitude())
+            .RuleFor(t => t.Value, f => f.Finance.Amount(1, 2000))
+            .RuleFor(t => t.AvailableLimit, (f, t) => card.CardLimit - t.Value);
+
+        var list = new List<Transaction>();
+        var count = 10;
+        for (int i = 0; i < count; i++ ) {
+            var transaction = transactionFaker.Generate();
+            list.Add(transaction);
+            _cardRepository.SubtractMoney(transaction.CardId, transaction.Value);
+        }
+
+        return list;
     }
 }

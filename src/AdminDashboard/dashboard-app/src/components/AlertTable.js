@@ -19,7 +19,7 @@ const AlertTable = ({data}) => {
   const currentRecords = data.slice(startIdx, endIdx);
 
   return (
-    <div className="flex flex-col items-center justify-center w-[800px]">
+    <div className="flex flex-col items-center justify-center w-[800px] mb-6">
     <div className="flex justify-between w-full mb-4">
         <button
           onClick={handlePrev}

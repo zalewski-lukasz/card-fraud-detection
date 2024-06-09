@@ -8,4 +8,5 @@ public interface IDataGeneratorService
     void GenerateCardData(int cardCount);
     IList<Transaction> GenerateTransactionData(int transactionCount);
     IList<Transaction> GenerateTransactionsForOverTheLimitAnomaly();
+    IList<Transaction> GenerateTransactionForMultipleTransactionsAnomaly();
 }

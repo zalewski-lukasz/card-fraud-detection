@@ -6,9 +6,9 @@ import Heading from '../components/Heading';
 import AlertTable from '../components/AlertTable';
 
 const MainPage = () => {
-
     const [alertData, setAlertData] = useState([]);
     const [reasonCounts, setReasonCounts] = useState({});
+    const [chartData, setChartData] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,6 +23,7 @@ const MainPage = () => {
 
                 setAlertData(data);
                 setReasonCounts(reasonMap);
+                setChartData(transformChartData(data));
                 console.log("Data fetched and processed");
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -34,58 +35,41 @@ const MainPage = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const data = [
-        {
-          name: 'Page A',
-          uv: 4000,
-          pv: 2400,
-          amt: 2400,
-        },
-        {
-          name: 'Page B',
-          uv: 3000,
-          pv: 1398,
-          amt: 2210,
-        },
-        {
-          name: 'Page C',
-          uv: 2000,
-          pv: 9800,
-          amt: 2290,
-        },
-        {
-          name: 'Page D',
-          uv: 2780,
-          pv: 3908,
-          amt: 2000,
-        },
-        {
-          name: 'Page E',
-          uv: 1890,
-          pv: 4800,
-          amt: 2181,
-        },
-        {
-          name: 'Page F',
-          uv: 2390,
-          pv: 3800,
-          amt: 2500,
-        },
-        {
-          name: 'Page G',
-          uv: 3490,
-          pv: 4300,
-          amt: 2100,
-        },
-      ];
+    const transformChartData = (data) => {
+        const groupedData = data.reduce((acc, alert) => {
+            const date = new Date(alert.timestamp);
+            const time = `${date.getHours()}:${date.getMinutes()}`;
+            const reason = alert.reason;
+            console.log(reason)
+            if (!acc[time]) {
+                acc[time] = {};
+            }
+
+            if (!acc[time][reason]) {
+                acc[time][reason] = 0;
+            }
+
+            acc[time][reason] += 1;
+            return acc;
+        }, {});
+
+        const chartData = Object.keys(groupedData).map(time => {
+            return {
+                time,
+                ...groupedData[time]
+            };
+        });
+
+        return chartData;
+    };
 
     return (
         <div className="flex flex-col items-center min-h-screen bg-gray-900">
-            <Heading value={"Anomaly detection dashoard"}/>
-            <AlertChart data={data}></AlertChart>
-            <Heading value={"Detected anomalies"}/>
+            <Heading value={"Anomaly detection dashboard"} />
+            <AlertChart data={chartData} />
+            <Heading value={"Detected anomalies"} />
             <AlertTable data={alertData} />
-        </div>       
+        </div>
     )
 }
 
