@@ -22,9 +22,10 @@ public class DataConsumerService : BackgroundService
 
         var config = new ConsumerConfig
         {
-            BootstrapServers = "localhost:9092",
+            BootstrapServers = "kafka:29092",
             GroupId = "alerty-consumer-group",
-            AutoOffsetReset = AutoOffsetReset.Earliest
+            AutoOffsetReset = AutoOffsetReset.Earliest,
+            AllowAutoCreateTopics = true
         };
 
         _kafkaConsumer = new ConsumerBuilder<Null, string>(config).Build();

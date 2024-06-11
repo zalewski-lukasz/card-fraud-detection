@@ -23,7 +23,7 @@ public class DataProducerService : BackgroundService
 
         var config = new ProducerConfig
         {
-            BootstrapServers = "localhost:9092"
+            BootstrapServers = "kafka:29092"
         };
 
         _kafkaProducer = new ProducerBuilder<Null, string>(config).Build();
