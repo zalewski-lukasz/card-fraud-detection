@@ -42,14 +42,22 @@ public class AnomalyDetectionJob {
 
 		DataStream<Transaction> dataStream = env.fromSource(dataSource, WatermarkStrategy.noWatermarks(), "transaction-data-source");
 
-		KeyedStream<Transaction, Integer> keyedTransactions = dataStream
+		KeyedStream<Transaction, Integer> keyedCardTransactions = dataStream
 				.keyBy(Transaction::getCardId);
 
-		DataStream<Alert> valueOverTheLimitAlerts = keyedTransactions
+		KeyedStream<Transaction, Integer> keyedUserTransactions = dataStream
+				.keyBy(Transaction::getCardId);
+
+		DataStream<Alert> valueOverTheLimitAlerts = keyedCardTransactions
 				.process(new OverTheLimitDetector())
 						.name("over-the-limit-alerts");
 
-		DataStream<Alert> foundAlerts = valueOverTheLimitAlerts;
+		DataStream<Alert> multipleTransactionsAlerts = keyedUserTransactions
+				.process(new MultipleTransactionsAnomaly())
+				.name("multiple-transactions-alerts");
+
+		DataStream<Alert> foundAlerts = valueOverTheLimitAlerts
+				.union(multipleTransactionsAlerts);
 
 		KafkaSink<Alert> dataSink = KafkaSink.<Alert>builder()
 						.setBootstrapServers("kafka:29092")

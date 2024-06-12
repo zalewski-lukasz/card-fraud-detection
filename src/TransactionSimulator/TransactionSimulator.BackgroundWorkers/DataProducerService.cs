@@ -14,14 +14,12 @@ public class DataProducerService : BackgroundService
     private readonly ILogger<DataProducerService> _logger;
     private readonly IDataGeneratorService _dataGeneratorService;
     private readonly IProducer<Null, string> _kafkaProducer;
-    private Stack<string> _currentEvents;
 
     public DataProducerService(ILogger<DataProducerService> logger,
         IDataGeneratorService dataGeneratorService)
     {
         _logger = logger;
         _dataGeneratorService = dataGeneratorService;
-        _currentEvents = new Stack<string>();
 
         CreateTopicAsync("kafka:29092", "Transakcje").ConfigureAwait(true);
         CreateTopicAsync("kafka:29092", "Alerty").ConfigureAwait(true);
@@ -31,7 +29,7 @@ public class DataProducerService : BackgroundService
             BootstrapServers = "kafka:29092"
         };
 
-        _kafkaProducer = new ProducerBuilder<Null, string>(config).Build(); 
+        _kafkaProducer = new ProducerBuilder<Null, string>(config).Build();
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -48,23 +46,45 @@ public class DataProducerService : BackgroundService
         }
     }
 
-    public void RegisterAnomalyEvent(string eventName)
-    {
-        _currentEvents.Push(eventName);
-    }
-
     private void InitializeData()
     {
         _dataGeneratorService.GenerateUserData(2000);
         _dataGeneratorService.GenerateCardData(10000);
     }
 
+    private void SendTransactionData(IList<Transaction> transactions)
+    {
+        if (transactions is null || transactions.Count == 0) return;
+
+        foreach (var transaction in transactions)
+        {
+            _logger.LogInformation($"Generated new transaction: userId: {transaction.UserId}, cardId: {transaction.CardId}, value: {transaction.Value}");
+
+            string jsonString = $"{{\"userId\": {transaction.UserId}, \"cardId\": {transaction.CardId}, \"value\": {transaction.Value.ToString(CultureInfo.InvariantCulture)}, \"longitude\": {transaction.Longitude.ToString(CultureInfo.InvariantCulture)}, \"latitude\": {transaction.Latitude.ToString(CultureInfo.InvariantCulture)}, \"availableLimit\": {transaction.AvailableLimit.ToString(CultureInfo.InvariantCulture)}}}";
+            var message = new Message<Null, string>
+            {
+                Value = jsonString
+            };
+
+            _kafkaProducer.Produce("Transakcje", message, deliveryReport =>
+            {
+                if (deliveryReport.Error.IsError)
+                {
+                    _logger.LogError($"Failed to deliver message: {deliveryReport.Error.Reason}");
+                }
+                else
+                {
+                    _logger.LogInformation($"Message delivered to {deliveryReport.TopicPartitionOffset}");
+                }
+            });
+        }
+    }
+
     private void GenerateTransactions(int count)
     {
         var transactions = _dataGeneratorService.GenerateTransactionData(count);
-        transactions.Concat(GenerateAnomalyTransactions());
 
-        foreach(var transaction in transactions)
+        foreach (var transaction in transactions)
         {
             _logger.LogInformation($"Generated new transaction: userId: {transaction.UserId}, cardId: {transaction.CardId}, value: {transaction.Value}");
 
@@ -87,36 +107,26 @@ public class DataProducerService : BackgroundService
             });
         }
 
-        _kafkaProducer.Flush(TimeSpan.FromSeconds(1));
+        _kafkaProducer.Flush(TimeSpan.FromSeconds(3));
     }
 
-    private IList<Transaction> GenerateAnomalyTransactions()
+    public void GenerateAnomalyTransactions(string anomalyEvent)
     {
-        var list = new List<Transaction>();
+        _logger.LogInformation($"New anomaly of type {anomalyEvent} is being generated...");
 
-        if (_currentEvents.Count > 0)
+        switch (anomalyEvent)
         {
-            return list;
+            case "OVER_THE_LIMIT_ANOMALY":
+                SendTransactionData(_dataGeneratorService.GenerateTransactionsForOverTheLimitAnomaly());
+                break;
+            case "MULTIPLE_TRANSACTIONS_ANOMALY":
+                SendTransactionData(_dataGeneratorService.GenerateTransactionForMultipleTransactionsAnomaly());
+                break;
+            default:
+                break;
         }
 
-        while ( _currentEvents.Count > 0)
-        {
-            var anomalyEvent = _currentEvents.Pop();
 
-            switch (anomalyEvent)
-            {
-                case "OVER_THE_LIMIT_ANOMALY": 
-                    list.Concat(_dataGeneratorService.GenerateTransactionsForOverTheLimitAnomaly());
-                    break;
-                case "MULTIPLE_TRANSACTIONS_ANOMALY":
-                    list.Concat(_dataGeneratorService.GenerateTransactionForMultipleTransactionsAnomaly());
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        return list;
     }
 
     static async Task CreateTopicAsync(string bootstrapServers, string topicName)

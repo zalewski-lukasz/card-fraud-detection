@@ -25,7 +25,7 @@ const AlertChart = ({data}) => {
           <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#444' }} itemStyle={{ color: '#fff' }} />
           <Legend wrapperStyle={{ color: '#ccc' }} />
           <Line type="monotone" dataKey="Value of the transaction extends the limit!" stroke="#8884d8" activeDot={{ r: 8 }} />
-          <Line type="monotone" dataKey="Multiple card payments found for the user!" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="High number of transactions detected for the user within a minute!" stroke="#82ca9d" />
         </LineChart>
       </div>
         

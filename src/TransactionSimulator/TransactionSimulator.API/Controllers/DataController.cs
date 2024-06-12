@@ -32,7 +32,7 @@ namespace TransactionSimulator.API.Controllers
         [Route("/api/generate-over-the-limit-anomaly")]
         public IActionResult GenerateOverTheLimitAnomaly()
         {
-            _producerService.RegisterAnomalyEvent("OVER_THE_LIMIT_ANOMALY");
+            _producerService.GenerateAnomalyTransactions("OVER_THE_LIMIT_ANOMALY");
             return Ok();
         }
 
@@ -40,7 +40,7 @@ namespace TransactionSimulator.API.Controllers
         [Route("/api/generate-multiple-transactions-anomaly")]
         public IActionResult GenerateMultipleTransactionAnomaly()
         {
-            _producerService.RegisterAnomalyEvent("MULTIPLE_TRANSACTIONS_ANOMALY");
+            _producerService.GenerateAnomalyTransactions("MULTIPLE_TRANSACTIONS_ANOMALY");
             return Ok();
         }
     }
