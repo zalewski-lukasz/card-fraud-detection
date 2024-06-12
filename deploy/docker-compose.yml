@@ -1,16 +1,6 @@
 version: "2"
 
 services:
-  kafdrop:
-    image: obsidiandynamics/kafdrop
-    container_name: "kafdrop"
-    restart: "no"
-    ports:
-      - "9000:9000"
-    environment:
-      KAFKA_BROKERCONNECT: "kafka:29092"
-    depends_on:
-      - "kafka"
 
   kafka:
     image: obsidiandynamics/kafka
@@ -28,6 +18,17 @@ services:
       KAFKA_RESTART_ATTEMPTS: "10"
       KAFKA_RESTART_DELAY: "5"
       ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: "0"
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: "kafdrop"
+    restart: "no"
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:29092"
+    depends_on:
+      - "kafka"
 
   jobmanager:
     image: flink:latest
@@ -48,3 +49,39 @@ services:
       - "jobmanager:jobmanager"
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
+
+  psd-transaction-simulator:
+    image: xlukzalx/psd-transaction-simulator
+    container_name: "psd-transaction-simulator"
+    depends_on:
+      - kafdrop
+      - kafka
+      - jobmanager
+      - taskmanager
+    ports:
+      - "5162:5162"
+
+  psd-anomaly-consumer:
+    image: xlukzalx/psd-anomaly-consumer
+    container_name: "psd-anomaly-consumer"
+    depends_on:
+      - kafdrop
+      - kafka
+      - jobmanager
+      - taskmanager
+      - psd-transaction-simulator
+    ports:
+      - "5261:5261"
+
+  psd-admin-dashboard:
+    image: xlukzalx/psd-admin-dashboard
+    container_name: "psd-admin-dashboard"
+    depends_on:
+      - kafdrop
+      - kafka
+      - jobmanager
+      - taskmanager
+      - psd-transaction-simulator
+      - psd-anomaly-consumer
+    ports:
+      - "3000:3000"
