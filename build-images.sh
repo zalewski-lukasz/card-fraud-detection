@@ -14,8 +14,7 @@ cd ../../;
 
 # Build and push image for web application
 
-#cd ./src/AdminDashboard/dashboard-app/;
-#ls;
-#docker build -t xlukzalx/psd-admin-dashboard:latest .;
-#docker push xlukzalx/psd-admin-dashboard:latest;
+cd ./src/AdminDashboard/dashboard-app/;
+docker build -t xlukzalx/psd-admin-dashboard:latest .;
+docker push xlukzalx/psd-admin-dashboard:latest;
 
