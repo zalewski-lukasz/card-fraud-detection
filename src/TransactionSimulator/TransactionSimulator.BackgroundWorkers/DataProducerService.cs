@@ -1,9 +1,11 @@
 ﻿using Confluent.Kafka;
+using Confluent.Kafka.Admin;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using TransactionSimulator.Models;
 using TransactionSimulator.Services.Interfaces;
+using static Confluent.Kafka.ConfigPropertyNames;
 
 namespace TransactionSimulator.BackgroundWorkers;
 
@@ -21,12 +23,15 @@ public class DataProducerService : BackgroundService
         _dataGeneratorService = dataGeneratorService;
         _currentEvents = new Stack<string>();
 
+        CreateTopicAsync("kafka:29092", "Transakcje").ConfigureAwait(true);
+        CreateTopicAsync("kafka:29092", "Alerty").ConfigureAwait(true);
+
         var config = new ProducerConfig
         {
             BootstrapServers = "kafka:29092"
         };
 
-        _kafkaProducer = new ProducerBuilder<Null, string>(config).Build();
+        _kafkaProducer = new ProducerBuilder<Null, string>(config).Build(); 
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -112,5 +117,30 @@ public class DataProducerService : BackgroundService
         }
 
         return list;
+    }
+
+    static async Task CreateTopicAsync(string bootstrapServers, string topicName)
+    {
+        using var adminClient = new AdminClientBuilder(new AdminClientConfig
+        {
+            BootstrapServers = bootstrapServers
+        }).Build();
+
+        try
+        {
+            await adminClient.CreateTopicsAsync(new TopicSpecification[]
+            {
+            new TopicSpecification
+            {
+                Name = topicName,
+                ReplicationFactor = 1,
+                NumPartitions = 1
+            }
+            });
+        }
+        catch (CreateTopicsException e)
+        {
+            Console.WriteLine($"An error occured creating topic {e.Results[0].Topic}: {e.Results[0].Error.Reason}");
+        }
     }
 }
