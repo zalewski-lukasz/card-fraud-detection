@@ -106,6 +106,35 @@ public class DataGeneratorService : IDataGeneratorService
         var selectedCardId = new Faker().PickRandom(cardIds);
         var card = _cardRepository.GetCard(selectedCardId);
         var user = _userRepository.GetUser(card.UserId);
+        var longitude = new Faker().Address.Longitude();
+        var latitude = new Faker().Address.Latitude();
+        var selectedUserId = user.Id;
+
+        var transactionFaker = new Faker<Transaction>()
+            .RuleFor(t => t.CardId, _ => selectedCardId)
+            .RuleFor(t => t.UserId, _ => selectedUserId)
+            .RuleFor(t => t.Longitude, _ => longitude)
+            .RuleFor(t => t.Latitude, _ => latitude)
+            .RuleFor(t => t.Value, f => f.Finance.Amount(1, 500))
+            .RuleFor(t => t.AvailableLimit, (f, t) => card.CardLimit - t.Value);
+
+        var list = new List<Transaction>();
+        var count = 10;
+        for (int i = 0; i < count; i++ ) {
+            var transaction = transactionFaker.Generate();
+            list.Add(transaction);
+            _cardRepository.SubtractMoney(transaction.CardId, transaction.Value);
+        }
+
+        return list;
+    }
+
+    public IList<Transaction> GenerateSuddenLocationChangeAnomaly()
+    {
+        var cardIds = _cardRepository.GetCardIds();
+        var selectedCardId = new Faker().PickRandom(cardIds);
+        var card = _cardRepository.GetCard(selectedCardId);
+        var user = _userRepository.GetUser(card.UserId);
         var selectedUserId = user.Id;
 
         var transactionFaker = new Faker<Transaction>()
@@ -113,12 +142,13 @@ public class DataGeneratorService : IDataGeneratorService
             .RuleFor(t => t.UserId, _ => selectedUserId)
             .RuleFor(t => t.Longitude, f => f.Address.Longitude())
             .RuleFor(t => t.Latitude, f => f.Address.Latitude())
-            .RuleFor(t => t.Value, f => f.Finance.Amount(1, 2000))
+            .RuleFor(t => t.Value, f => f.Finance.Amount(1, 500))
             .RuleFor(t => t.AvailableLimit, (f, t) => card.CardLimit - t.Value);
 
         var list = new List<Transaction>();
-        var count = 10;
-        for (int i = 0; i < count; i++ ) {
+        var count = 3;
+        for (int i = 0; i < count; i++)
+        {
             var transaction = transactionFaker.Generate();
             list.Add(transaction);
             _cardRepository.SubtractMoney(transaction.CardId, transaction.Value);

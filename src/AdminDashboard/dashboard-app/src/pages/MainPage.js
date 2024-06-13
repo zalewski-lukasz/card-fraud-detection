@@ -36,32 +36,38 @@ const MainPage = () => {
     }, []);
 
     const transformChartData = (data) => {
+        const reasons = [
+            "Value of the transaction extends the limit!",
+            "High number of transactions detected for the user within a minute!",
+            "Too big of a change in location in time window!"
+        ];
+    
         const groupedData = data.reduce((acc, alert) => {
             const date = new Date(alert.timestamp);
             const time = `${date.getHours()}:${date.getMinutes()}`;
             const reason = alert.reason;
-            console.log(reason)
+    
             if (!acc[time]) {
                 acc[time] = {};
+                // Initialize all reasons with 0 count
+                reasons.forEach(r => {
+                    acc[time][r] = 0;
+                });
             }
-
-            if (!acc[time][reason]) {
-                acc[time][reason] = 0;
-            }
-
+    
             acc[time][reason] += 1;
             return acc;
         }, {});
-
+    
         const chartData = Object.keys(groupedData).map(time => {
             return {
                 time,
                 ...groupedData[time]
             };
         });
-
+    
         return chartData;
-    };
+    };    
 
     return (
         <div className="flex flex-col items-center min-h-screen bg-gray-900">

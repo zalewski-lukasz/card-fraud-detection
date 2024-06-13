@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<ICardRepository, CardRepository>();
+builder.Services.AddSingleton<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddSingleton<IDataGeneratorService, DataGeneratorService>();
 builder.Services.AddSingleton<IDataManagementService, DataManagementService>();
