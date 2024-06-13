@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './componentstyle.css';
 
-const AlertTable = ({data}) => {
-
+const AlertTable = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [filterReason, setFilterReason] = useState('');
   const recordsPerPage = 5;
 
   const handlePrev = () => {
@@ -11,16 +11,25 @@ const AlertTable = ({data}) => {
   };
 
   const handleNext = () => {
-    if ((currentPage + 1) * recordsPerPage < data.length) setCurrentPage(currentPage + 1);
+    if ((currentPage + 1) * recordsPerPage < filteredData.length) setCurrentPage(currentPage + 1);
   };
+
+  const handleFilterChange = (event) => {
+    setFilterReason(event.target.value);
+    setCurrentPage(0); // Reset to first page when filter changes
+  };
+
+  const filteredData = filterReason
+    ? data.filter(record => record.reason === filterReason)
+    : data;
 
   const startIdx = currentPage * recordsPerPage;
   const endIdx = startIdx + recordsPerPage;
-  const currentRecords = data.slice(startIdx, endIdx);
+  const currentRecords = filteredData.slice(startIdx, endIdx);
 
   return (
     <div className="flex flex-col items-center justify-center w-[800px] mb-6">
-    <div className="flex justify-between w-full mb-4">
+      <div className="flex justify-between w-full mb-4">
         <button
           onClick={handlePrev}
           disabled={currentPage === 0}
@@ -28,13 +37,23 @@ const AlertTable = ({data}) => {
         >
           Previous
         </button>
+        <select
+          value={filterReason}
+          onChange={handleFilterChange}
+          className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+        >
+          <option value="">All Reasons</option>
+          <option value="Value of the transaction extends the limit!">Value of the transaction extends the limit!</option>
+          <option value="High number of transactions detected for the user within a minute!">High number of transactions detected for the user within a minute!</option>
+          <option value="Too big of a change in location in time window!">Too big of a change in location in time window!</option>
+        </select>
         <button
           onClick={handleNext}
-          disabled={(currentPage + 1) * recordsPerPage >= data.length}
+          disabled={(currentPage + 1) * recordsPerPage >= filteredData.length}
           className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
         >
           Next
-    </button>
+        </button>
       </div>
       <table className="min-w-full bg-gray-800 text-white">
         <thead>
