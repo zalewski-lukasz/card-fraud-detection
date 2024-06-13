@@ -46,6 +46,7 @@ const AlertTable = ({ data }) => {
           <option value="Value of the transaction extends the limit!">Value of the transaction extends the limit!</option>
           <option value="High number of transactions detected for the user within a minute!">High number of transactions detected for the user within a minute!</option>
           <option value="Too big of a change in location in time window!">Too big of a change in location in time window!</option>
+          <option value="General outlier transaction detected!">General outlier transaction detected!</option>
         </select>
         <button
           onClick={handleNext}

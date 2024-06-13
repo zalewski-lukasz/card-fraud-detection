@@ -27,6 +27,7 @@ const AlertChart = ({data}) => {
           <Line type="monotone" dataKey="Value of the transaction extends the limit!" stroke="#8884d8" activeDot={{ r: 8 }} />
           <Line type="monotone" dataKey="High number of transactions detected for the user within a minute!" stroke="#82ca9d" activeDot={{ r: 8 }} />
           <Line type="monotone" dataKey="Too big of a change in location in time window!" stroke="#ff00ff" activeDot={{ r: 8 }}/>
+          <Line type="monotone" dataKey="General outlier transaction detected!" stroke="#ffa500" activeDot={{ r: 8 }}/>
         </LineChart>
       </div>
         

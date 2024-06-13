@@ -56,7 +56,7 @@ public class DataProducerService : BackgroundService
             if (anomalyChance == 2)
             {
                 _logger.LogInformation($"Randomly generating anomaly data for sudden location change anomaly...");
-                SendTransactionData(_dataGeneratorService.GenerateSuddenLocationChangeAnomaly(), 3000);
+                SendTransactionData(_dataGeneratorService.GenerateSuddenLocationChangeAnomaly(), 1000);
             }
 
             await Task.Delay(1000, stoppingToken);
@@ -143,7 +143,7 @@ public class DataProducerService : BackgroundService
                 SendTransactionData(_dataGeneratorService.GenerateTransactionForMultipleTransactionsAnomaly(), 1000);
                 break;
             case "LOCATION_ANOMALY":
-                SendTransactionData(_dataGeneratorService.GenerateSuddenLocationChangeAnomaly(), 3000);
+                SendTransactionData(_dataGeneratorService.GenerateSuddenLocationChangeAnomaly(), 1000);
                 break;
             default:
                 break;

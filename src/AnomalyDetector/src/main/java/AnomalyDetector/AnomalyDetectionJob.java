@@ -58,12 +58,17 @@ public class AnomalyDetectionJob {
 				.process(new MultipleTransactionsAnomaly())
 				.name("multiple-transactions-alerts");
 
-		DataStream<Alert> locationChangeAlerts = keyedCardTransactions
+		DataStream<Alert> generalOutlierAlerts = keyedCardTransactions
+				.process(new GeneralOutlierDetector())
+				.name("general-outlier-alerts");
+
+		DataStream<Alert> locationChangeAlerts = keyedUserTransactions
 				.window(ProcessingTimeSessionWindows.withGap(Time.seconds(3)))
 				.process(new LocationChangeDetector())
 				.name("location-change-alerts");
 
 		DataStream<Alert> foundAlerts = valueOverTheLimitAlerts
+				.union(generalOutlierAlerts)
 				.union(multipleTransactionsAlerts)
 				.union(locationChangeAlerts);
 

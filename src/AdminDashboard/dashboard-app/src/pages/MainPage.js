@@ -39,7 +39,8 @@ const MainPage = () => {
         const reasons = [
             "Value of the transaction extends the limit!",
             "High number of transactions detected for the user within a minute!",
-            "Too big of a change in location in time window!"
+            "Too big of a change in location in time window!",
+            "General outlier transaction detected!"
         ];
     
         const groupedData = data.reduce((acc, alert) => {
