@@ -50,13 +50,13 @@ public class DataProducerService : BackgroundService
             if (anomalyChance == 1)
             {
                 _logger.LogInformation($"Randomly generating anomaly data for multiple transactions anomaly...");
-                SendTransactionData(_dataGeneratorService.GenerateTransactionForMultipleTransactionsAnomaly());
+                SendTransactionData(_dataGeneratorService.GenerateTransactionForMultipleTransactionsAnomaly(), 1000);
             }
 
             if (anomalyChance == 2)
             {
                 _logger.LogInformation($"Randomly generating anomaly data for sudden location change anomaly...");
-                SendTransactionData(_dataGeneratorService.GenerateSuddenLocationChangeAnomaly());
+                SendTransactionData(_dataGeneratorService.GenerateSuddenLocationChangeAnomaly(), 3000);
             }
 
             await Task.Delay(1000, stoppingToken);
@@ -69,12 +69,13 @@ public class DataProducerService : BackgroundService
         _dataGeneratorService.GenerateCardData(10000);
     }
 
-    private void SendTransactionData(IList<Transaction> transactions)
+    private async void SendTransactionData(IList<Transaction> transactions, int delay)
     {
         if (transactions is null || transactions.Count == 0) return;
 
         foreach (var transaction in transactions)
         {
+            await Task.Delay(delay);
             _logger.LogInformation($"Generated new transaction: userId: {transaction.UserId}, cardId: {transaction.CardId}, value: {transaction.Value}");
             _transactionRepository.AddTransaction(transaction);
 
@@ -136,13 +137,13 @@ public class DataProducerService : BackgroundService
         switch (anomalyEvent)
         {
             case "OVER_THE_LIMIT_ANOMALY":
-                SendTransactionData(_dataGeneratorService.GenerateTransactionsForOverTheLimitAnomaly());
+                SendTransactionData(_dataGeneratorService.GenerateTransactionsForOverTheLimitAnomaly(), 1000);
                 break;
             case "MULTIPLE_TRANSACTIONS_ANOMALY":
-                SendTransactionData(_dataGeneratorService.GenerateTransactionForMultipleTransactionsAnomaly());
+                SendTransactionData(_dataGeneratorService.GenerateTransactionForMultipleTransactionsAnomaly(), 1000);
                 break;
             case "LOCATION_ANOMALY":
-                SendTransactionData(_dataGeneratorService.GenerateSuddenLocationChangeAnomaly());
+                SendTransactionData(_dataGeneratorService.GenerateSuddenLocationChangeAnomaly(), 3000);
                 break;
             default:
                 break;
