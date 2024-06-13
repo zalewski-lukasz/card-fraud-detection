@@ -26,6 +26,8 @@ import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsIni
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.windowing.assigners.ProcessingTimeSessionWindows;
+import org.apache.flink.streaming.api.windowing.time.Time;
 
 public class AnomalyDetectionJob {
 	public static void main(String[] args) throws Exception {
@@ -46,7 +48,7 @@ public class AnomalyDetectionJob {
 				.keyBy(Transaction::getCardId);
 
 		KeyedStream<Transaction, Integer> keyedUserTransactions = dataStream
-				.keyBy(Transaction::getCardId);
+				.keyBy(Transaction::getUserId);
 
 		DataStream<Alert> valueOverTheLimitAlerts = keyedCardTransactions
 				.process(new OverTheLimitDetector())
@@ -56,8 +58,14 @@ public class AnomalyDetectionJob {
 				.process(new MultipleTransactionsAnomaly())
 				.name("multiple-transactions-alerts");
 
+		DataStream<Alert> locationChangeAlerts = keyedCardTransactions
+				.window(ProcessingTimeSessionWindows.withGap(Time.seconds(3)))
+				.process(new LocationChangeDetector())
+				.name("location-change-alerts");
+
 		DataStream<Alert> foundAlerts = valueOverTheLimitAlerts
-				.union(multipleTransactionsAlerts);
+				.union(multipleTransactionsAlerts)
+				.union(locationChangeAlerts);
 
 		KafkaSink<Alert> dataSink = KafkaSink.<Alert>builder()
 						.setBootstrapServers("kafka:29092")

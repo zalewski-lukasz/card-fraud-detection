@@ -43,5 +43,13 @@ namespace TransactionSimulator.API.Controllers
             _producerService.GenerateAnomalyTransactions("MULTIPLE_TRANSACTIONS_ANOMALY");
             return Ok();
         }
+
+        [HttpPost]
+        [Route("/api/generate-location-anomaly")]
+        public IActionResult GenerateLocationAnomaly()
+        {
+            _producerService.GenerateAnomalyTransactions("LOCATION_ANOMALY");
+            return Ok();
+        }
     }
 }

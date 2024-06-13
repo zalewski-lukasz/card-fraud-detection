@@ -9,4 +9,5 @@ public interface IDataGeneratorService
     IList<Transaction> GenerateTransactionData(int transactionCount);
     IList<Transaction> GenerateTransactionsForOverTheLimitAnomaly();
     IList<Transaction> GenerateTransactionForMultipleTransactionsAnomaly();
+    IList<Transaction> GenerateSuddenLocationChangeAnomaly();
 }
